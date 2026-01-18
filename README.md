@@ -1,5 +1,11 @@
 # FarmXChain - Blockchain-Based Farm Management System
 
+
+![FarmXChain Dashboard](screenshots/dashboard.png)
+
+
+![FarmXChain Dashboard](screenshots/dashboard.png)
+
 FarmXChain is a comprehensive blockchain-based farm management system that connects farmers, distributors, retailers, and consumers in a transparent and secure agricultural supply chain. The system leverages blockchain technology to ensure crop traceability and verification throughout the supply chain.
 
 ## 🏗️ Architecture
