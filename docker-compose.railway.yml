@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./FarmXChain
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://maglev.proxy.rlwy.net:35964/railway
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=vPPJESNgSSHhvfMdOBPcEOxySHPhVOLi
+      - SERVER_PORT=8080
+      - SERVER_SERVLET_CONTEXT_PATH=/api/v1
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    environment:
+      - REACT_APP_API_URL=https://farmxchain-backend.up.railway.app/api/v1
