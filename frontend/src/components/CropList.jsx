@@ -59,7 +59,7 @@ const CropList = ({ crops: initialCrops, showVerification = true }) => {
           <div className="h-48 w-full relative bg-gray-100">
             {crop.imageUrl ? (
               <img
-                src={crop.imageUrl.startsWith('http') ? crop.imageUrl : `http://localhost:8080/api/v1${crop.imageUrl}`}
+                src={crop.imageUrl.startsWith('http') ? crop.imageUrl : `/api/v1${crop.imageUrl}`}
                 alt={crop.cropName}
                 className="w-full h-full object-cover"
               />

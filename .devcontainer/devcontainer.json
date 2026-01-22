@@ -1,0 +1,41 @@
+{
+    "name": "FarmXChain Codespace",
+    "dockerComposeFile": [
+        "../docker-compose.yml"
+    ],
+    "service": "frontend",
+    "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+    "features": {
+        "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
+    },
+    "forwardPorts": [
+        3000,
+        8080,
+        3306
+    ],
+    "portsAttributes": {
+        "3000": {
+            "label": "Frontend (Nginx)",
+            "onAutoForward": "notify"
+        },
+        "8080": {
+            "label": "Backend (Spring Boot)",
+            "onAutoForward": "silent"
+        },
+        "3306": {
+            "label": "MySQL Database",
+            "onAutoForward": "silent"
+        }
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "vscjava.vscode-java-pack",
+                "dbaeumer.vscode-eslint",
+                "esbenp.prettier-vscode",
+                "ms-azuretools.vscode-docker"
+            ]
+        }
+    },
+    "remoteUser": "node"
+}

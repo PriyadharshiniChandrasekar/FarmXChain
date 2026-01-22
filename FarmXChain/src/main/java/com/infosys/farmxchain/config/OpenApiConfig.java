@@ -16,7 +16,6 @@ public class OpenApiConfig {
                 .info(new Info()
                         .title("FarmXChain API")
                         .version("1.0")
-                        .description("API documentation for FarmXChain application"))
-                .addServersItem(new Server().url("http://localhost:8080/api/v1"));
+                        .description("API documentation for FarmXChain application"));
     }
 }
