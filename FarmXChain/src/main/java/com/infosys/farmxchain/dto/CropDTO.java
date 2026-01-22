@@ -22,6 +22,9 @@ public class CropDTO {
     private String blockchainTxHash;
     private String originLocation;
     private String qualityData;
+    private BigDecimal latitude;
+    private BigDecimal longitude;
+    private String imageUrl;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

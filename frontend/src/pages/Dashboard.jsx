@@ -1,15 +1,34 @@
 import React, { useState, useEffect } from 'react';
 import AuthService from '../services/AuthService';
-import StatsCard from '../components/smart-ui/StatsCard';
 import ActionTile from '../components/smart-ui/ActionTile';
+import CropList from '../components/CropList';
+import CropService from '../services/CropService';
 
 const Dashboard = () => {
   const [user, setUser] = useState(null);
+  const [crops, setCrops] = useState([]);
+  const [loadingCrops, setLoadingCrops] = useState(false);
 
   useEffect(() => {
     const currentUser = AuthService.getCurrentUser();
     setUser(currentUser);
+
+    if (currentUser && ['DISTRIBUTOR', 'RETAILER', 'CONSUMER'].includes(currentUser.role)) {
+      loadAllCrops();
+    }
   }, []);
+
+  const loadAllCrops = async () => {
+    try {
+      setLoadingCrops(true);
+      const response = await CropService.getAllCrops();
+      setCrops(response.data || []);
+    } catch (err) {
+      console.error('Error loading crops:', err);
+    } finally {
+      setLoadingCrops(false);
+    }
+  };
 
   if (!user) {
     return (
@@ -104,6 +123,26 @@ const Dashboard = () => {
 
         </div>
       </div>
+
+      {/* Produce Explorer - Universal Visibility */}
+      {['DISTRIBUTOR', 'RETAILER', 'CONSUMER'].includes(user.role) && (
+        <div className="space-y-6">
+          <div className="flex justify-between items-end">
+            <div>
+              <h2 className="text-2xl font-display font-bold text-neutral-900">Produce Explorer</h2>
+              <p className="text-neutral-500 text-sm">Real-time blockchain-verified produce from our network of farmers.</p>
+            </div>
+          </div>
+
+          {loadingCrops ? (
+            <div className="flex justify-center py-12">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
+            </div>
+          ) : (
+            <CropList crops={crops} />
+          )}
+        </div>
+      )}
     </div>
   );
 };

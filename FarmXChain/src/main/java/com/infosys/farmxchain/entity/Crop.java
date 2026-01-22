@@ -44,6 +44,15 @@ public class Crop {
     @Column(name = "origin_location")
     private String originLocation;
 
+    @Column(name = "latitude", precision = 10, scale = 8)
+    private BigDecimal latitude;
+
+    @Column(name = "longitude", precision = 11, scale = 8)
+    private BigDecimal longitude;
+
+    @Column(name = "image_url")
+    private String imageUrl;
+
     @Column(name = "quality_data")
     private String qualityData;
 

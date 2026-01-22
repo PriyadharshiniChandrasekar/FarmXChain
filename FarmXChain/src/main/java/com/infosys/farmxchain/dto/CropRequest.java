@@ -28,4 +28,6 @@ public class CropRequest {
     private String qualityCertificateUrl;
     private String originLocation;
     private String qualityData;
+    private BigDecimal latitude;
+    private BigDecimal longitude;
 }

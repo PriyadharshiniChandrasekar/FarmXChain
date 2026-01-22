@@ -9,6 +9,7 @@ import com.infosys.farmxchain.exception.ResourceNotFoundException;
 import com.infosys.farmxchain.repository.CropRepository;
 import com.infosys.farmxchain.repository.FarmerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
@@ -27,7 +28,10 @@ public class CropService {
     @Autowired
     private BlockchainService blockchainService;
 
-    public CropDTO addCrop(Long farmerId, CropRequest request) {
+    @Autowired
+    private FileStorageService fileStorageService;
+
+    public CropDTO addCrop(Long farmerId, CropRequest request, MultipartFile image) {
         Farmer farmer = farmerRepository.findByUserId(farmerId)
                 .orElseThrow(() -> new ResourceNotFoundException("Farmer not found with id: " + farmerId));
 
@@ -38,8 +42,15 @@ public class CropService {
                 .harvestDate(request.getHarvestDate())
                 .qualityCertificateUrl(request.getQualityCertificateUrl())
                 .originLocation(request.getOriginLocation() != null ? request.getOriginLocation() : farmer.getFarmLocation())
+                .latitude(request.getLatitude())
+                .longitude(request.getLongitude())
                 .qualityData(request.getQualityData())
                 .build();
+
+        if (image != null && !image.isEmpty()) {
+            String fileName = fileStorageService.storeFile(image);
+            crop.setImageUrl("/uploads/" + fileName);
+        }
 
         Crop savedCrop = cropRepository.save(crop);
 
@@ -112,6 +123,9 @@ public class CropService {
                 .blockchainHash(crop.getBlockchainHash())
                 .blockchainTxHash(crop.getBlockchainTxHash())
                 .originLocation(crop.getOriginLocation())
+                .latitude(crop.getLatitude())
+                .longitude(crop.getLongitude())
+                .imageUrl(crop.getImageUrl())
                 .qualityData(crop.getQualityData())
                 .createdAt(crop.getCreatedAt())
                 .updatedAt(crop.getUpdatedAt())

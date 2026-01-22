@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://backend:8080/api/v1';
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080/api/v1';
 
 class CropService {
   getAuthHeaders() {
@@ -8,10 +8,21 @@ class CropService {
     return { Authorization: `Bearer ${token}` };
   }
 
-  async addCrop(cropData) {
+  async addCrop(cropData, imageFile) {
     try {
-      const response = await axios.post(`${API_BASE_URL}/crops/add`, cropData, {
-        headers: this.getAuthHeaders()
+      const formData = new FormData();
+      // Create a Blob for the crop data and specify the content type as application/json
+      formData.append('crop', new Blob([JSON.stringify(cropData)], { type: 'application/json' }));
+
+      if (imageFile) {
+        formData.append('image', imageFile);
+      }
+
+      const response = await axios.post(`${API_BASE_URL}/crops/add`, formData, {
+        headers: {
+          ...this.getAuthHeaders(),
+          'Content-Type': 'multipart/form-data'
+        }
       });
       return response.data;
     } catch (error) {

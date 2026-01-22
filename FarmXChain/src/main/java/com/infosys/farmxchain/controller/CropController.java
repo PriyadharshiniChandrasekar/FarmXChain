@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @RestController
@@ -20,10 +21,17 @@ public class CropController {
     @Autowired
     private CropService cropService;
 
-    @PostMapping("/add")
-    public ResponseEntity<ApiResponse<CropDTO>> addCrop(@Valid @RequestBody CropRequest request) {
+    @Autowired
+    private com.infosys.farmxchain.service.FileStorageService fileStorageService;
+
+    @PostMapping(value = "/add", consumes = {"multipart/form-data"})
+    public ResponseEntity<ApiResponse<CropDTO>> addCrop(
+            @RequestPart("crop") @Valid CropRequest request,
+            @RequestPart(value = "image", required = false) MultipartFile image) {
+        
         Long farmerId = SecurityUtils.getCurrentUserId();
-        CropDTO crop = cropService.addCrop(farmerId, request);
+        CropDTO crop = cropService.addCrop(farmerId, request, image);
+        
         ApiResponse<CropDTO> response = ApiResponse.<CropDTO>builder()
                 .success(true)
                 .message("Crop added successfully and registered on blockchain")
